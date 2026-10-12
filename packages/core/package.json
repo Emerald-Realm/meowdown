@@ -37,7 +37,7 @@
     "@lezer/highlight": "^1.2.5",
     "@meowdown/embed": "workspace:*",
     "@meowdown/markdown": "workspace:*",
-    "@ocavue/utils": "^1.8.0",
+    "@ocavue/utils": "^1.9.0",
     "@post-embed/exporter": "^0.5.0",
     "@post-embed/schema": "^0.5.2",
     "@post-embed/types": "^0.5.0",
@@ -65,13 +65,13 @@
   "devDependencies": {
     "@meowdown/vitest": "workspace:*",
     "@ocavue/tsconfig": "^0.7.1",
-    "@tsdown/css": "^0.23.0",
+    "@tsdown/css": "^0.23.1",
     "@types/hast": "^3.0.5",
     "@types/mdast": "^4.0.4",
     "@vitest/browser-playwright": "^5.0.3",
     "dedent": "^1.7.2",
     "diffable-html-snapshot": "^0.3.0",
-    "tsdown": "^0.23.0",
+    "tsdown": "^0.23.1",
     "vitest": "^5.0.3"
   },
   "publishConfig": {
