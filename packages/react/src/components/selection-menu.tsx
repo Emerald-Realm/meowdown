@@ -7,9 +7,11 @@ import {
   type VirtualElement,
 } from '@meowdown/core'
 import { defineUpdateHandler, isTextSelection } from '@prosekit/core'
+import type { EditorView } from '@prosekit/pm/view'
 import { useEditor, useExtension } from '@prosekit/react'
 import { SparklesIcon } from 'lucide-react'
 import {
+  use,
   useCallback,
   useEffect,
   useMemo,
@@ -20,6 +22,7 @@ import {
 
 import { useDelayedFlag } from '../hooks/use-delayed-flag.ts'
 
+import { CollisionBoundaryContext } from './collision-boundary.ts'
 import styles from './selection-menu.module.css'
 import type {
   SelectionMenuContext,
@@ -70,6 +73,7 @@ export function SelectionMenu({
   affordance = true,
 }: SelectionMenuProps): ReactNode {
   const editor = useEditor<EditorExtension>()
+  const collisionBoundary = use(CollisionBoundaryContext)
   const [selection, setSelection] = useState<SelectionSnapshot>()
 
   // Tracks the live selection for the affordance. A pending replacement, a
@@ -105,7 +109,7 @@ export function SelectionMenu({
 
   const menuAnchor: VirtualElement | undefined = useMemo(() => {
     if (!context) return
-    return getVirtualElementFromRange(editor.view, { from: context.from, to: context.to })
+    return getMenuAnchor(editor.view, context.from, context.to)
   }, [context, editor])
 
   const open = !!context
@@ -130,6 +134,7 @@ export function SelectionMenu({
             anchor={menuAnchor}
             side="bottom"
             sideOffset={8}
+            collisionBoundary={collisionBoundary}
             className={styles.Positioner}
           >
             <Popover.Popup className={styles.Popup} data-testid="selection-menu" finalFocus={false}>
@@ -153,6 +158,7 @@ export function SelectionMenu({
             anchor={affordanceAnchor}
             side="bottom"
             sideOffset={4}
+            collisionBoundary={collisionBoundary}
             className={styles.AffordancePositioner}
           >
             <Popover.Popup
@@ -180,6 +186,24 @@ export function SelectionMenu({
   }
 
   return null
+}
+
+/**
+ * Anchors the menu to the selected range, or to the range's end when the range
+ * is taller than a third of the visible height: such a range leaves no room
+ * for the menu above or below it.
+ */
+function getMenuAnchor(view: EditorView, from: number, to: number): VirtualElement {
+  const range = getVirtualElementFromRange(view, { from, to })
+  const end = getVirtualElementFromRange(view, { from: to, to })
+  const pickAnchor = (): VirtualElement => {
+    const visibleHeight = view.dom.ownerDocument.defaultView?.visualViewport?.height ?? Infinity
+    return range.getBoundingClientRect().height > visibleHeight / 3 ? end : range
+  }
+  return {
+    getBoundingClientRect: () => pickAnchor().getBoundingClientRect(),
+    contextElement: view.dom,
+  }
 }
 
 /**

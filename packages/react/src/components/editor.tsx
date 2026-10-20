@@ -131,6 +131,13 @@ export interface EditorProps {
   selectionMenuAffordance?: boolean | undefined
 
   /**
+   * The element the editor's menus and popovers stay inside, for example one
+   * that leaves out the area under a phone's status bar. Defaults to the
+   * viewport.
+   */
+  collisionBoundary?: Element | undefined
+
+  /**
    * Extra controls rendered in the pending-replacement preview footer, next to
    * the built-in accept ("Replace selection" / "Insert below", per the staged
    * mode) and Discard buttons (e.g. a retry button).
@@ -434,6 +441,7 @@ export function MarkdownEditor({
   onWikilinkSearch,
   onSelectionMenuSearch,
   selectionMenuAffordance = true,
+  collisionBoundary,
   pendingReplacementActions,
   onPendingReplacementResolve,
   onWikilinkClick,
@@ -587,6 +595,7 @@ export function MarkdownEditor({
         onWikilinkSearch={onWikilinkSearch}
         onSelectionMenuSearch={onSelectionMenuSearch}
         selectionMenuAffordance={selectionMenuAffordance}
+        collisionBoundary={collisionBoundary}
         pendingReplacementActions={pendingReplacementActions}
         onPendingReplacementResolve={onPendingReplacementResolve}
         onWikilinkClick={onWikilinkClick}
