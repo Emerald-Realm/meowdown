@@ -71,7 +71,10 @@ export function TagMenu({ onTagSearch }: TagMenuProps): ReactElement {
       onOpenChange={(event) => setOpen(event.detail)}
       onQueryChange={(event) => setQuery(event.detail)}
     >
-      <AutocompletePositioner className={styles.Positioner} boundary={toFloatingBoundary(collisionBoundary)}>
+      <AutocompletePositioner
+        className={styles.Positioner}
+        boundary={toFloatingBoundary(collisionBoundary)}
+      >
         <AutocompletePopup className={styles.Popup} data-testid="tag-menu">
           {items.map((item) => (
             <AutocompleteItem

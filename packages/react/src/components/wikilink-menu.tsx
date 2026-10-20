@@ -85,7 +85,10 @@ export function WikilinkMenu({ onWikilinkSearch }: WikilinkMenuProps): ReactElem
       onOpenChange={(event) => setOpen(event.detail)}
       onQueryChange={(event) => setQuery(event.detail)}
     >
-      <AutocompletePositioner className={styles.Positioner} boundary={toFloatingBoundary(collisionBoundary)}>
+      <AutocompletePositioner
+        className={styles.Positioner}
+        boundary={toFloatingBoundary(collisionBoundary)}
+      >
         <AutocompletePopup className={styles.Popup} data-testid="wikilink-menu">
           {items.map((item) => (
             <AutocompleteItem

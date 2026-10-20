@@ -177,7 +177,10 @@ export function SlashMenu({
           onChange={handleFileInputChange}
         />
       ) : null}
-      <AutocompletePositioner className={styles.Positioner} boundary={toFloatingBoundary(collisionBoundary)}>
+      <AutocompletePositioner
+        className={styles.Positioner}
+        boundary={toFloatingBoundary(collisionBoundary)}
+      >
         <AutocompletePopup className={styles.Popup} data-testid="slash-menu">
           {!inTableCell && (
             <>
