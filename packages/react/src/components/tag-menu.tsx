@@ -13,7 +13,7 @@ import { use, useCallback, useEffect, useState, type ReactElement } from 'react'
 import { returnsTrue } from '../utils/returns-true.ts'
 
 import styles from './autocomplete-menu.module.css'
-import { CollisionBoundaryContext } from './collision-boundary.ts'
+import { CollisionBoundaryContext, toFloatingBoundary } from './collision-boundary.ts'
 import type { TagItem, TagSearchHandler } from './types.ts'
 
 // Match "#tag" with at least one character, so typing a heading ("# ") never
@@ -71,7 +71,7 @@ export function TagMenu({ onTagSearch }: TagMenuProps): ReactElement {
       onOpenChange={(event) => setOpen(event.detail)}
       onQueryChange={(event) => setQuery(event.detail)}
     >
-      <AutocompletePositioner className={styles.Positioner} boundary={collisionBoundary}>
+      <AutocompletePositioner className={styles.Positioner} boundary={toFloatingBoundary(collisionBoundary)}>
         <AutocompletePopup className={styles.Popup} data-testid="tag-menu">
           {items.map((item) => (
             <AutocompleteItem

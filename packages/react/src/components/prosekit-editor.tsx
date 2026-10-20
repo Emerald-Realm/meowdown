@@ -54,7 +54,7 @@ import { defineCodeBlockView } from '../extensions/code-block-view.ts'
 import type { TimeFormat } from '../utils/date-format.ts'
 
 import { BlockHandle } from './block-handle.tsx'
-import { CollisionBoundaryContext } from './collision-boundary.ts'
+import { CollisionBoundaryContext, type CollisionBoundary } from './collision-boundary.ts'
 import { DropIndicator } from './drop-indicator.tsx'
 import { EditorExtensions } from './editor-extensions.tsx'
 import { LinkMenu } from './link-menu.tsx'
@@ -180,7 +180,7 @@ export interface ProseKitEditorProps {
   /**
    * Keeps menus and popovers inside an element. See `EditorProps.collisionBoundary`.
    */
-  collisionBoundary?: Element | undefined
+  collisionBoundary?: CollisionBoundary | undefined
 
   /**
    * Extra pending-replacement controls. See `EditorProps.pendingReplacementActions`.

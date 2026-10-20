@@ -39,6 +39,7 @@ import {
 
 import type { TimeFormat } from '../utils/date-format.ts'
 
+import type { CollisionBoundary } from './collision-boundary.ts'
 import { ProseKitEditor } from './prosekit-editor.tsx'
 import type {
   EditorHandle,
@@ -135,7 +136,7 @@ export interface EditorProps {
    * that leaves out the area under a phone's status bar. Defaults to the
    * viewport.
    */
-  collisionBoundary?: Element | undefined
+  collisionBoundary?: CollisionBoundary | undefined
 
   /**
    * Extra controls rendered in the pending-replacement preview footer, next to

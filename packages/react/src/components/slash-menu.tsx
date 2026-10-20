@@ -28,7 +28,7 @@ import {
 import { formatNowTime, type TimeFormat } from '../utils/date-format.ts'
 
 import styles from './autocomplete-menu.module.css'
-import { CollisionBoundaryContext } from './collision-boundary.ts'
+import { CollisionBoundaryContext, toFloatingBoundary } from './collision-boundary.ts'
 import type { SlashMenuItem, SlashMenuSearchHandler } from './types.ts'
 
 // Match inputs like "/", "/table", "/heading 1" etc. Do not match "/ heading"
@@ -177,7 +177,7 @@ export function SlashMenu({
           onChange={handleFileInputChange}
         />
       ) : null}
-      <AutocompletePositioner className={styles.Positioner} boundary={collisionBoundary}>
+      <AutocompletePositioner className={styles.Positioner} boundary={toFloatingBoundary(collisionBoundary)}>
         <AutocompletePopup className={styles.Popup} data-testid="slash-menu">
           {!inTableCell && (
             <>

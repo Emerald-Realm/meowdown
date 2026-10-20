@@ -13,7 +13,7 @@ import { use, useCallback, useEffect, useState, type ReactElement } from 'react'
 import { returnsTrue } from '../utils/returns-true.ts'
 
 import styles from './autocomplete-menu.module.css'
-import { CollisionBoundaryContext } from './collision-boundary.ts'
+import { CollisionBoundaryContext, toFloatingBoundary } from './collision-boundary.ts'
 import type { WikilinkItem, WikilinkSearchHandler } from './types.ts'
 
 // Open the wikilink menu on either "[[" or "@", and close on "[" or "]".
@@ -85,7 +85,7 @@ export function WikilinkMenu({ onWikilinkSearch }: WikilinkMenuProps): ReactElem
       onOpenChange={(event) => setOpen(event.detail)}
       onQueryChange={(event) => setQuery(event.detail)}
     >
-      <AutocompletePositioner className={styles.Positioner} boundary={collisionBoundary}>
+      <AutocompletePositioner className={styles.Positioner} boundary={toFloatingBoundary(collisionBoundary)}>
         <AutocompletePopup className={styles.Popup} data-testid="wikilink-menu">
           {items.map((item) => (
             <AutocompleteItem
