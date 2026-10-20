@@ -195,6 +195,7 @@ export function SelectionMenu({
  */
 function getMenuAnchor(view: EditorView, from: number, to: number): VirtualElement {
   const range = getVirtualElementFromRange(view, { from, to })
+  if (from === to) return range
   const end = getVirtualElementFromRange(view, { from: to, to })
   const pickAnchor = (): VirtualElement => {
     const visibleHeight = view.dom.ownerDocument.defaultView?.visualViewport?.height ?? Infinity
