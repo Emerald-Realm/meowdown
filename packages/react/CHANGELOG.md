@@ -1,5 +1,31 @@
 # @meowdown/react
 
+## 0.81.0
+
+### Minor Changes
+
+- [#706](https://github.com/prosekit/meowdown/pull/706) [`eb70e1b`](https://github.com/prosekit/meowdown/commit/eb70e1b4cde5e4eaf7a566a694c39a10f654431a) Thanks [@ocavuebot](https://github.com/ocavuebot)! - Add `collisionBoundary` to keep menus inside an area.
+
+### Patch Changes
+
+- [#705](https://github.com/prosekit/meowdown/pull/705) [`bc09e5b`](https://github.com/prosekit/meowdown/commit/bc09e5b7b9aeabb5acb4876009a8b9715ab6ce39) Thanks [@ocavuebot](https://github.com/ocavuebot)! - Keep the selection menu visible for tall selections.
+- Updated dependencies [[`9ba79c9`](https://github.com/prosekit/meowdown/commit/9ba79c99e177c1cda9d478abc8114456e6323aab), [`e1e0e2f`](https://github.com/prosekit/meowdown/commit/e1e0e2fc38bff102ff4b5eb0bb23a6846a258e66), [`318b69f`](https://github.com/prosekit/meowdown/commit/318b69fac1c664e5771070a4c81e30f349771589)]:
+  - @meowdown/core@0.81.2
+
+## 0.80.3
+
+### Patch Changes
+
+- [#698](https://github.com/prosekit/meowdown/pull/698) [`ff21b6c`](https://github.com/prosekit/meowdown/commit/ff21b6c3ff647faefd211d6b27babcf4810a4560) Thanks [@ocavuebot](https://github.com/ocavuebot)! - Show the node selection outline on code blocks, including math and Mermaid previews, when they are selected with the block handle.
+
+## 0.80.2
+
+### Patch Changes
+
+- Updated dependencies [[`ab56a0b`](https://github.com/prosekit/meowdown/commit/ab56a0be47d711e61ea9a4b1e1ae600affec5d61)]:
+  - @meowdown/markdown@0.77.0
+  - @meowdown/core@0.81.1
+
 ## 0.80.1
 
 ### Patch Changes
