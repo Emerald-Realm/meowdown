@@ -394,6 +394,13 @@
     margin-top: 0.25em;
   }
 
+  /* WebKit fills selection gaps (line ends, half-leading strips) inside every
+   * positioned block, which draws strips beside unselected text in a list
+   * item. It skips transformed blocks. */
+  .ProseMirror .prosemirror-flat-list {
+    transform: translate(0);
+  }
+
   /* A caret must never land inside the marker. iOS trackpad mode otherwise
    * bounces between the marker and the previous block on every touch move
    * (WebKit accepts an empty non-editable block as a caret position; UIKit
