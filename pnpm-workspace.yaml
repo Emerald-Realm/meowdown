@@ -26,6 +26,11 @@ minimumReleaseAgeExclude:
   - prosemirror-flat-list
   - mdast-util-to-markdown@2.2.1
 
+peerDependencyRules:
+  allowedVersions:
+    # `@vitejs/plugin-react` calls `oxc-transform-react`; this peer of `@astrojs/react` lags behind it.
+    '@astrojs/react>oxc-transform-react': 0.152.x
+
 allowBuilds:
   esbuild: false
   simple-git-hooks: false
