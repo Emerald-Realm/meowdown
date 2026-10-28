@@ -1,5 +1,5 @@
 ---
-'@meowdown/react': minor
+'@meowdown/react': patch
 ---
 
-Precompile components and hooks with React Compiler. The published build now imports `react/compiler-runtime`.
+Precompile components and hooks with React Compiler.
