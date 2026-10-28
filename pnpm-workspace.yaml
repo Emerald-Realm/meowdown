@@ -28,8 +28,7 @@ minimumReleaseAgeExclude:
 
 peerDependencyRules:
   allowedVersions:
-    # `@vitejs/plugin-react` calls `oxc-transform-react`; this peer of `@astrojs/react` lags behind it.
-    '@astrojs/react>oxc-transform-react': 0.152.x
+    oxc-transform-react: 0.x
 
 allowBuilds:
   esbuild: false
