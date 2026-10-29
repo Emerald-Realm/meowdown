@@ -1,3 +1,4 @@
+import { sleep } from '@ocavue/utils'
 import { TextSelection } from '@prosekit/pm/state'
 import { describe, expect, it } from 'vitest'
 import { page, userEvent } from 'vitest/browser'
@@ -195,6 +196,30 @@ describe('software-keyboard paragraph input', () => {
       expect(docToMarkdown(fixture.doc)).toContain('Next line')
     },
   )
+
+  it('leaves an observed Enter keydown to the existing split/fallback path', async () => {
+    using fixture = setupMode('hide', '[[Created page]]<a>')
+    fixture.view.dom.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'Enter',
+        code: 'Enter',
+        keyCode: 13,
+        which: 13,
+        bubbles: true,
+        cancelable: true,
+      }),
+    )
+    const input = new InputEvent('beforeinput', {
+      inputType: 'insertParagraph',
+      bubbles: true,
+      cancelable: true,
+    })
+    fixture.view.dom.dispatchEvent(input)
+    expect(input.defaultPrevented).toBe(false)
+    await sleep(250)
+    expect(fixture.doc.childCount).toBe(2)
+    expect(docToMarkdown(fixture.doc).match(/Created page/g)).toHaveLength(1)
+  })
 
   it('does not dispatch a second split for uncancelable native input or composition', () => {
     using fixture = setupMode('hide', '[[Created page]]<a>')
