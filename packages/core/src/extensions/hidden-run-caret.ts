@@ -112,7 +112,21 @@ function createBeforeInputPlugin(): Plugin {
     props: {
       handleDOMEvents: {
         beforeinput: (view, event) => {
-          if (view.composing) return false
+          if (view.composing || event.isComposing) return false
+          if (event.inputType === 'insertParagraph' && event.cancelable) {
+            // Software keyboards may omit keydown. Native DOM splitting can clone
+            // a non-editable inline label beside its hidden Markdown source.
+            const enter = new KeyboardEvent('keydown', {
+              key: 'Enter',
+              code: 'Enter',
+              keyCode: 13,
+              which: 13,
+            })
+            const handled = view.someProp('handleKeyDown', (handler) => handler(view, enter))
+            if (!handled) return false
+            event.preventDefault()
+            return true
+          }
           const command =
             event.inputType === 'deleteContentBackward'
               ? backspaceUnformat

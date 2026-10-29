@@ -177,6 +177,48 @@ describe('hide mode caret invariants', () => {
   })
 })
 
+describe('software-keyboard paragraph input', () => {
+  it.each(['<a>[[Created page]]', '[[Created page]]<a>'])(
+    'splits at a link edge without duplicating its visible label: %s',
+    (text) => {
+      using fixture = setupMode('hide', text)
+      const event = new InputEvent('beforeinput', {
+        inputType: 'insertParagraph',
+        bubbles: true,
+        cancelable: true,
+      })
+      fixture.view.dom.dispatchEvent(event)
+      expect(event.defaultPrevented).toBe(true)
+      expect(fixture.doc.childCount).toBe(2)
+      expect(docToMarkdown(fixture.doc).match(/Created page/g)).toHaveLength(1)
+      fixture.editor.commands.insertText({ text: 'Next line' })
+      expect(docToMarkdown(fixture.doc)).toContain('Next line')
+    },
+  )
+
+  it('does not dispatch a second split for uncancelable native input or composition', () => {
+    using fixture = setupMode('hide', '[[Created page]]<a>')
+    const original = fixture.doc
+    fixture.view.dom.dispatchEvent(
+      new InputEvent('beforeinput', {
+        inputType: 'insertParagraph',
+        bubbles: true,
+        cancelable: false,
+      }),
+    )
+    expect(fixture.doc.eq(original)).toBe(true)
+    fixture.view.dom.dispatchEvent(
+      new InputEvent('beforeinput', {
+        inputType: 'insertParagraph',
+        bubbles: true,
+        cancelable: true,
+        isComposing: true,
+      }),
+    )
+    expect(fixture.doc.eq(original)).toBe(true)
+  })
+})
+
 describe('hide mode Enter relocation', () => {
   it('splits after the unit at the closing content edge', async () => {
     using fixture = setupMode('hide', 'foo **bold<a>** bar')
