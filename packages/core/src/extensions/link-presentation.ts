@@ -2,6 +2,7 @@ import { matchEmbed } from '@meowdown/markdown'
 import { closeHistory } from '@prosekit/pm/history'
 import type { Command, EditorState } from '@prosekit/pm/state'
 import { TextSelection } from '@prosekit/pm/state'
+import { decodeString } from 'micromark-util-decode-string'
 
 import { getLinkUnitAt } from './get-link-unit-at.ts'
 import type { MdImageAttrs } from './inline-marks.ts'
@@ -15,6 +16,7 @@ export interface PresentedLink {
   readonly to: number
   readonly href: string
   readonly text: string
+  readonly title: string
   readonly presentation: LinkPresentation
 }
 
@@ -27,13 +29,14 @@ export function getPresentedLinks(state: EditorState): PresentedLink[] {
   const visit = (position: number): void => {
     const image = getMarkRangeAt(state, position, 'mdImage')
     if (image) {
-      const { src, alt } = image.mark.attrs as MdImageAttrs
+      const { src, alt, title } = image.mark.attrs as MdImageAttrs
       if (matchEmbed(src)) {
         found.set(image.from, {
           from: image.from,
           to: image.to,
           href: src,
           text: alt,
+          title,
           presentation: 'embed',
         })
       }
@@ -45,6 +48,7 @@ export function getPresentedLinks(state: EditorState): PresentedLink[] {
         ...link.unit,
         href: link.href,
         text: getLinkText(link),
+        title: link.title,
         presentation: 'link',
       })
     }
@@ -70,13 +74,19 @@ export function setLinkPresentation(presentation: LinkPresentation): Command {
       const transaction = closeHistory(state.tr)
       for (const link of links.toReversed()) {
         const destination = link.href.replaceAll('(', '%28').replaceAll(')', '%29')
-        const label = (link.text || link.href).replaceAll(/([\\[\]_*`])/g, String.raw`\$1`)
+        const label = decodeString(link.text || link.href).replaceAll(
+          /([&<\\[\]_*`~=$#])/g,
+          String.raw`\$1`,
+        )
+        const title = link.title ? ` "${link.title.replaceAll(/(["\\])/g, String.raw`\$1`)}"` : ''
         const markdown =
-          presentation === 'embed' ? `![${label}](${destination})` : `[${label}](${destination})`
+          presentation === 'embed'
+            ? `![${label}](${destination}${title})`
+            : `[${label}](${destination}${title})`
         transaction.insertText(markdown, link.from, link.to)
       }
-      const start = transaction.mapping.map(state.selection.from, -1)
-      const end = transaction.mapping.map(state.selection.to, 1)
+      const start = transaction.mapping.map(state.selection.from, state.selection.empty ? 1 : -1)
+      const end = state.selection.empty ? start : transaction.mapping.map(state.selection.to, 1)
       transaction.setSelection(
         TextSelection.between(transaction.doc.resolve(start), transaction.doc.resolve(end)),
       )

@@ -18,6 +18,27 @@ function setup(markdown: string) {
 }
 
 describe('link presentation', () => {
+  it('preserves parsed titles and escaped labels through both conversions', () => {
+    using fixture = setup(`[a \\[b\\] \\*c\\*](${VIDEO} 'Demo "title"')`)
+    const { editor, view } = fixture
+    expect(setLinkPresentation('embed')(editor.state, view.dispatch, view)).toBe(true)
+    expect(getPresentedLinks(editor.state)[0]?.title).toBe('Demo "title"')
+    expect(editor.state.doc.textContent).toContain('![a \\[b\\] \\*c\\*]')
+    expect(setLinkPresentation('link')(editor.state, view.dispatch, view)).toBe(true)
+    expect(getPresentedLinks(editor.state)[0]?.title).toBe('Demo "title"')
+    expect(editor.state.doc.textContent).toContain('[a \\[b\\] \\*c\\*]')
+    expect(editor.state.doc.textContent).not.toContain('\\\\[')
+  })
+
+  it('keeps a collapsed caret collapsed inside a converted link', () => {
+    using fixture = setup(VIDEO)
+    const { editor, view } = fixture
+    editor.commands.selectText(8)
+    expect(setLinkPresentation('embed')(editor.state, view.dispatch, view)).toBe(true)
+    expect(editor.state.selection.empty).toBe(true)
+    expect(editor.state.selection.from).toBeGreaterThan(8)
+  })
+
   it('recovers a failed embed as an ordinary link, with undo', () => {
     using fixture = setup(`![](${TWEET})`)
     const { editor, view } = fixture
